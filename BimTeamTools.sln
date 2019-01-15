@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2018
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BimTeamTools", "BimTeamTools\BimTeamTools.csproj", "{CE618466-BFCA-46DE-9BDF-BC105B40FB67}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CE618466-BFCA-46DE-9BDF-BC105B40FB67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE618466-BFCA-46DE-9BDF-BC105B40FB67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE618466-BFCA-46DE-9BDF-BC105B40FB67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE618466-BFCA-46DE-9BDF-BC105B40FB67}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {838C92EF-35F0-4B02-BCFD-764CC1A75F1D}
+	EndGlobalSection
+EndGlobal
