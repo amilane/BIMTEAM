@@ -41,7 +41,7 @@ namespace BimTeamTools
             application.CreateRibbonTab(tabName);
 
             // Add a new ribbon panel
-            RibbonPanel ribbonPanel = application.CreateRibbonPanel(tabName, "Common");
+            RibbonPanel ribbonPanel = application.CreateRibbonPanel(tabName, "Общее");
 
             // Get dll assembly path
             string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;

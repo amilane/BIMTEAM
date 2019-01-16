@@ -20,10 +20,9 @@ namespace BimTeamTools
             Document doc = uidoc?.Document;
             try
             {
-                IList<Reference> pickedObjs = uidoc.Selection.PickObjects(ObjectType.Element, "Select elements");
-                List<ElementId> ids = (from Reference r in pickedObjs select r.ElementId).ToList();
                 List<Element> selectedElements = new List<Element>();
-                
+                ICollection<ElementId> ids = uidoc.Selection.GetElementIds();
+
                 double length, lengthMeters;
                 string lengthRound;
 
@@ -31,7 +30,7 @@ namespace BimTeamTools
                 {
                     t.Start("TotalLength");
                     message = "";
-                    if (pickedObjs != null && pickedObjs.Count > 0)
+                    if (ids != null && ids.Count > 0)
                     {
                         foreach (ElementId eid in ids)
                         {
@@ -39,8 +38,9 @@ namespace BimTeamTools
                         }
                     }
 
-                    var groupsByCategory = selectedElements.GroupBy(i => i.Category);
+                    var groupsByCategory = selectedElements.GroupBy(i => i.Category.Name);
 
+                    
                     foreach (var group in groupsByCategory)
                     {
                         length = 0;
@@ -57,7 +57,7 @@ namespace BimTeamTools
 
                         if (length > 0)
                         {
-                            message += String.Format("{0} - {1} м \n", group.Key.Name, lengthRound);
+                            message += String.Format("{0} - {1} м \n", group.Key, lengthRound);
                         }
                     }
 
