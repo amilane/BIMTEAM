@@ -39,6 +39,7 @@
     <Reference Include="RevitAPIUI">
       <HintPath>C:\Program Files\Autodesk\Revit 2018\RevitAPIUI.dll</HintPath>
       <Private>False</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -56,11 +57,10 @@
     <Compile Include="App.cs" />
     <Compile Include="Common\DelegateCommand.cs" />
     <Compile Include="Common\Node.cs" />
-    <Compile Include="Filter\FilterControl.xaml.cs">
-      <DependentUpon>FilterControl.xaml</DependentUpon>
+    <Compile Include="Filter\FilterView.xaml.cs">
+      <DependentUpon>FilterView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Filter\FilterExCommand.cs" />
-    <Compile Include="Filter\FilterViewModel.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -86,7 +86,7 @@
     <None Include=".editorconfig" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Filter\FilterControl.xaml">
+    <Page Include="Filter\FilterView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -25,49 +25,74 @@ namespace BimTeamTools
 
         View activeView = doc.ActiveView;
 
-        //Create list of families in model (Category - Family - Type)
-        IEnumerable<Element> modelElements = new FilteredElementCollector(doc, activeView.Id).WhereElementIsNotElementType().WhereElementIsViewIndependent().ToElements();
-        var elemsByCategories = modelElements.GroupBy(i => i.Category.Name);
+        // List of selected elements
+        List<Element> selectedElements = new List<Element>();
+        ICollection<ElementId> ids = uidoc.Selection.GetElementIds();
 
+        if (ids != null && ids.Count > 0)
+        {
+          foreach (ElementId eid in ids)
+          {
+            selectedElements.Add(doc.GetElement(eid));
+          }
+        }
 
+        //Create data for TreeView
+        var elemsByCategories = selectedElements.OrderBy(i => i.Category.Name).GroupBy(i => i.Category.Name);
         ObservableCollection<Node> familyList = new ObservableCollection<Node>();
 
-        foreach (var group in elemsByCategories)
+        foreach (var category in elemsByCategories)
         {
           Node categoryNode = new Node();
+          categoryNode.Text = category.Key;
+
+          var elemsByFamilyName = category.OrderBy(i => i.Name).GroupBy(i => i.Name);
           
-          categoryNode.Name = group.Key;
-          // Сделать уникальные имена семейств
-          ObservableCollection<Node> familyNames = new ObservableCollection<Node>();
-          foreach (Element e in group)
+          foreach (var family in elemsByFamilyName)
           {
-            Node familyName = new Node();
-            familyName.Name = e.Name;
-            familyNames.Add(familyName);
+            Node familyNode = new Node();
+            familyNode.Text = family.Key;
+            familyNode.Parent.Add(categoryNode);
+            categoryNode.Children.Add(familyNode);
           }
-
-          categoryNode.Nodes = familyNames;
-
+          
           familyList.Add(categoryNode);
         }
 
-        // Create a view model that will be associated to the DataContext of the view.
-        FilterViewModel vmod = new FilterViewModel();
-        vmod.UIAPP = uiapp;
-        vmod.DOC = doc;
-        vmod.ModelElements = familyList;
+       
 
         System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
 
 
-        using (FilterControl window = new FilterControl())
+        using (FilterView window = new FilterView())
         {
           System.Windows.Interop.WindowInteropHelper helper =
             new System.Windows.Interop.WindowInteropHelper(window);
           helper.Owner = proc.MainWindowHandle;
 
-          window.DataContext = vmod;
+          window.DOC = doc;
+          window.treeView.ItemsSource = familyList;
           window.ShowDialog();
+
+          var CurrentNodes = window.treeView.ItemsSource as ObservableCollection<Node>;
+          string lol = "";
+          foreach (var i in CurrentNodes)
+          {
+            var familyNodes = i.Children;
+            foreach (var fam in familyNodes)
+            {
+              if (fam.IsChecked == true)
+              {
+                lol += fam.Text;
+              }
+            }
+
+          }
+
+          window.textBox.Text = lol;
+
+
+
         }
         return Result.Succeeded;
       }
