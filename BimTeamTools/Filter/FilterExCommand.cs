@@ -6,6 +6,8 @@ using Autodesk.Revit.ApplicationServices;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Windows.Controls;
 using System.Windows.Documents;
 
 namespace BimTeamTools
@@ -37,7 +39,7 @@ namespace BimTeamTools
           }
         }
 
-        //Create data for TreeView
+        // Create data for TreeView (Category - Family - FamilyType)
         var elemsByCategories = selectedElements.OrderBy(i => i.Category.Name).GroupBy(i => i.Category.Name);
         ObservableCollection<Node> familyList = new ObservableCollection<Node>();
 
@@ -46,7 +48,9 @@ namespace BimTeamTools
           Node categoryNode = new Node();
           categoryNode.Text = category.Key;
 
-          var elemsByFamilyName = category.OrderBy(i => i.Name).GroupBy(i => i.Name);
+          var elemsByFamilyName = category.
+            OrderBy(i => i.get_Parameter(BuiltInParameter.ELEM_FAMILY_PARAM).AsValueString()).
+            GroupBy(i => i.get_Parameter(BuiltInParameter.ELEM_FAMILY_PARAM).AsValueString());
           
           foreach (var family in elemsByFamilyName)
           {
@@ -54,12 +58,20 @@ namespace BimTeamTools
             familyNode.Text = family.Key;
             familyNode.Parent.Add(categoryNode);
             categoryNode.Children.Add(familyNode);
+
+            var elemsByFamilyType = family.OrderBy(i => i.Name).GroupBy(i => i.Name);
+            foreach (var familyType in elemsByFamilyType)
+            {
+              Node familyTypeNode = new Node();
+              familyTypeNode.Text = familyType.Key;
+              familyTypeNode.Parent.Add(familyNode);
+              familyNode.Children.Add(familyTypeNode);
+            }
           }
-          
           familyList.Add(categoryNode);
         }
 
-       
+        
 
         System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
 
@@ -71,28 +83,19 @@ namespace BimTeamTools
           helper.Owner = proc.MainWindowHandle;
 
           window.DOC = doc;
+          window.selectedElements = selectedElements;
           window.treeView.ItemsSource = familyList;
+          //window.cbParameter1.ItemsSource = CheckedNodes(window.treeView);
+
+
+
+
+          
           window.ShowDialog();
 
-          var CurrentNodes = window.treeView.ItemsSource as ObservableCollection<Node>;
-          string lol = "";
-          foreach (var i in CurrentNodes)
-          {
-            var familyNodes = i.Children;
-            foreach (var fam in familyNodes)
-            {
-              if (fam.IsChecked == true)
-              {
-                lol += fam.Text;
-              }
-            }
-
-          }
-
-          window.textBox.Text = lol;
 
 
-
+          
         }
         return Result.Succeeded;
       }
@@ -102,5 +105,29 @@ namespace BimTeamTools
         return Result.Failed;
       }
     }
+
+
+
+    private void FindCheckedNodes(
+      List<Node> checked_nodes, ObservableCollection<Node> nodes)
+    {
+      foreach (Node node in nodes)
+      {
+        // Add this node.
+        if (node.IsChecked == true) checked_nodes.Add(node);
+
+        // Check the node's descendants.
+        FindCheckedNodes(checked_nodes, node.Children);
+      }
+    }
+
+    private List<Node> CheckedNodes(TreeView treeView)
+    {
+      List<Node> checked_nodes = new List<Node>();
+      FindCheckedNodes(checked_nodes, (ObservableCollection<Node>)treeView.ItemsSource);
+      return checked_nodes;
+    }
+
+
   }
 }

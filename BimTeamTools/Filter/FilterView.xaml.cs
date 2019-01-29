@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Eventing.Reader;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -21,7 +22,7 @@ namespace BimTeamTools
     private Application APP = null;
     private UIDocument UIDOC = null;
     public Document DOC = null;
-
+    public List<Element> selectedElements;
 
     public FilterView()
     {
@@ -33,7 +34,7 @@ namespace BimTeamTools
       this.Close();
     }
 
-    private List<string> selectedNames = new List<string>();
+    
     private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
       CheckBox currentCheckBox = (CheckBox)sender;
@@ -42,48 +43,30 @@ namespace BimTeamTools
 
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-      var CurrentNodes = treeView.ItemsSource as ObservableCollection<Node>;
-      string lol = "";
-      foreach (var i in CurrentNodes)
-      {
-        var familyNodes = i.Children;
-        foreach (var fam in familyNodes)
-        {
-          if (fam.IsChecked == true)
-          {
-            lol += fam.Text;
-          }
-        }
-        
-      }
-
-      MessageBox.Show(lol, "sdsd");
+      
+      //MessageBox.Show(lol.ToString(), "sdsd");
     }
 
+    
     private void cbParameter1_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      var CurrentNodes = treeView.ItemsSource as ObservableCollection<Node>;
-      List<string> lol = new List<string>();
-      foreach (var i in CurrentNodes)
-      {
-        var familyNodes = i.Children;
-        foreach (var fam in familyNodes)
-        {
-          if (fam.IsChecked == true)
-          {
-            lol.Add(fam.Text);
-          }
-        }
-      }
+      textBox.Text = cbParameter1.SelectedValue.ToString();
+    }
+    private void cbParameter1_OnDropDownOpened(object sender, EventArgs e)
+    {
 
-      ComboBox cb = (ComboBox) sender;
-      cb.ItemsSource = lol;
-
-
-
+      GetParamsFromSelectedElements getParams = new GetParamsFromSelectedElements();
+      SortedDictionary<string, StorageType> parameterDict = getParams.getParamsFromSelectedElements(DOC, (ObservableCollection<Node>)treeView.ItemsSource, selectedElements);
+      cbParameter1.ItemsSource = parameterDict;
+      
 
 
     }
+    
+
+
+
+
 
   }
 }

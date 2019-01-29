@@ -61,6 +61,7 @@
       <DependentUpon>FilterView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Filter\FilterExCommand.cs" />
+    <Compile Include="Filter\GetParamsFromSelectedElements.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
