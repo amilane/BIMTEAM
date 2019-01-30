@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics.Eventing.Reader;
-using System.Linq;
+using System.Security.RightsManagement;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using ComboBox = System.Windows.Controls.ComboBox;
+using BimTeamTools.Filter;
+
 
 namespace BimTeamTools
 {
@@ -23,6 +22,8 @@ namespace BimTeamTools
     private UIDocument UIDOC = null;
     public Document DOC = null;
     public List<Element> selectedElements;
+    
+
 
     public FilterView()
     {
@@ -51,19 +52,23 @@ namespace BimTeamTools
     private void cbParameter1_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
       textBox.Text = cbParameter1.SelectedValue.ToString();
+      cbOperation1.ItemsSource = ListOfOperands.listOfOperands((StorageType)cbParameter1.SelectedValue);
     }
     private void cbParameter1_OnDropDownOpened(object sender, EventArgs e)
     {
-
-      GetParamsFromSelectedElements getParams = new GetParamsFromSelectedElements();
-      SortedDictionary<string, StorageType> parameterDict = getParams.getParamsFromSelectedElements(DOC, (ObservableCollection<Node>)treeView.ItemsSource, selectedElements);
+      List<List<Element>> elementsByNodes = GetElementsFromTreeView.getElementsFromTreeView(DOC,
+        (ObservableCollection<Node>)treeView.ItemsSource, selectedElements);
+      SortedDictionary<string, StorageType> parameterDict = GetParamsFromSelectedElements.getParamsFromSelectedElements(elementsByNodes);
       cbParameter1.ItemsSource = parameterDict;
-      
+    }
 
-
+    private void cbValue1_OnDropDownOpened(object sender, EventArgs e)
+    {
+      List<List<Element>> elementsByNodes = GetElementsFromTreeView.getElementsFromTreeView(DOC,
+        (ObservableCollection<Node>)treeView.ItemsSource, selectedElements);
+      cbValue1.ItemsSource = ValuesFromParameter.valuesFromParameter(cbParameter1.Text, elementsByNodes);
     }
     
-
 
 
 

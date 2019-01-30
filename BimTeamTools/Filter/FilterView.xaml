@@ -35,17 +35,19 @@
       VerticalAlignment="Top"
       Width="215">
     </TreeView>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="249,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-        <TextBox Name ="textBox" HorizontalAlignment="Left" Height="104" Margin="249,44,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" />
+        <Button Content="Button" HorizontalAlignment="Left" Margin="240,336,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <TextBox Name ="textBox" HorizontalAlignment="Left" Height="104" Margin="240,361,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" />
         <ComboBox
           Name ="cbParameter1"
           HorizontalAlignment="Left"
-          Margin="249,166,0,0"
+          Margin="240,10,0,0"
           VerticalAlignment="Top"
           Width="120"
           SelectionChanged="cbParameter1_SelectionChanged"
           DropDownOpened="cbParameter1_OnDropDownOpened"
           DisplayMemberPath="Key"
           SelectedValuePath="Value"/>
+        <ComboBox x:Name="cbOperation1" HorizontalAlignment="Left" Margin="365,10,0,0" VerticalAlignment="Top" Width="120"/>
+    <ComboBox x:Name="cbValue1" HorizontalAlignment="Left" Margin="490,10,0,0" VerticalAlignment="Top" Width="120" DropDownOpened="cbValue1_OnDropDownOpened"/>
     </Grid>
 </Window>

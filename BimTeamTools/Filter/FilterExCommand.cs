@@ -1,14 +1,11 @@
 using System;
-using System.Collections;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.ApplicationServices;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Windows.Controls;
-using System.Windows.Documents;
 
 namespace BimTeamTools
 {
@@ -25,7 +22,7 @@ namespace BimTeamTools
         Application app = uiapp.Application;
         Document doc = uidoc.Document;
 
-        View activeView = doc.ActiveView;
+        
 
         // List of selected elements
         List<Element> selectedElements = new List<Element>();
@@ -75,7 +72,6 @@ namespace BimTeamTools
 
         System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
 
-
         using (FilterView window = new FilterView())
         {
           System.Windows.Interop.WindowInteropHelper helper =
@@ -85,11 +81,8 @@ namespace BimTeamTools
           window.DOC = doc;
           window.selectedElements = selectedElements;
           window.treeView.ItemsSource = familyList;
+          
           //window.cbParameter1.ItemsSource = CheckedNodes(window.treeView);
-
-
-
-
           
           window.ShowDialog();
 
