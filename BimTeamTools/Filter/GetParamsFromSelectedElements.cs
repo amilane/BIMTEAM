@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Autodesk.Revit.DB;
 
@@ -7,31 +6,40 @@ namespace BimTeamTools
 {
   static class GetParamsFromSelectedElements
   {
-    public static SortedDictionary<string, StorageType> getParamsFromSelectedElements(List<List<Element>> allSelectedElems)
+    public static SortedDictionary<string, ParameterData> getParamsFromSelectedElements(FilteredElementCollector collector)
     {
-      List<object>listOfParamsDictionaries = new List<object>();
-      foreach (var type in allSelectedElems)
+      List<object> listOfParamsDictionaries = new List<object>();
+      var families = collector.GroupBy(e => e.get_Parameter(BuiltInParameter.ELEM_FAMILY_PARAM).AsValueString());
+      foreach (var f in families)
       {
-        SortedDictionary<string, StorageType> tempDict = new SortedDictionary<string, StorageType>();
-        var parameters = type.First().Parameters;
+        Dictionary<string, ParameterData> tempDict = new Dictionary<string, ParameterData>();
+        var parameters = f.First().Parameters;
         foreach (Parameter p in parameters)
         {
-          if (!tempDict.ContainsKey(p.Definition.Name) && (p.StorageType != StorageType.ElementId | (p.StorageType == StorageType.ElementId & p.Definition.Name == "Уровень")))
+          ParameterData pd = new ParameterData();
+          if (!tempDict.ContainsKey(p.Definition.Name) && p.StorageType != StorageType.ElementId | (p.StorageType == StorageType.ElementId & p.Definition.Name == "Уровень"))
           {
-            tempDict.Add(p.Definition.Name, p.StorageType);
+            
+            pd.name = p.Definition.Name;
+            pd.storageType = p.StorageType;
+            pd.id = p.Id;
+
+            tempDict.Add(p.Definition.Name, pd);
           }
-          listOfParamsDictionaries.Add(tempDict);
         }
+        listOfParamsDictionaries.Add(tempDict);
       }
 
-      SortedDictionary<string, StorageType> DictMerged = (SortedDictionary<string, StorageType>)listOfParamsDictionaries.First();
-      foreach (SortedDictionary<string, StorageType> DictA in listOfParamsDictionaries)
+      var DictMerged = (Dictionary<string, ParameterData>)listOfParamsDictionaries.First();
+      foreach (Dictionary<string, ParameterData> DictA in listOfParamsDictionaries)
       {
-        var DictB = DictMerged.Intersect(DictA).ToDictionary(o => o.Key, o => o.Value);
-        DictMerged = new SortedDictionary<string, StorageType>(DictB);
+        var DictB = DictA.Where(i => DictMerged.Keys.Contains(i.Key)).ToDictionary(o => o.Key, o => o.Value);
+        DictMerged = DictB;
       }
 
-      return DictMerged;
+      return new SortedDictionary<string, ParameterData>(DictMerged);
+
+
     }
   }
 }

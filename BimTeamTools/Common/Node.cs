@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using Autodesk.Revit.DB;
 
 namespace BimTeamTools
 {
@@ -17,6 +18,7 @@ namespace BimTeamTools
     private string id;
     private bool? isChecked = false;
     private bool isExpanded;
+    private Category cat;
 
     public ObservableCollection<Node> Children {
       get { return this.children; }
@@ -39,6 +41,14 @@ namespace BimTeamTools
       set {
         this.text = value;
         RaisePropertyChanged("Text");
+      }
+    }
+
+    public Category Cat {
+      get { return this.cat; }
+      set {
+        this.cat = value;
+        RaisePropertyChanged("Category");
       }
     }
 

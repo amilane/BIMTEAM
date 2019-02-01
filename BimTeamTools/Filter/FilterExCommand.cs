@@ -22,18 +22,35 @@ namespace BimTeamTools
         Application app = uiapp.Application;
         Document doc = uidoc.Document;
 
-        
+
 
         // List of selected elements
-        List<Element> selectedElements = new List<Element>();
-        ICollection<ElementId> ids = uidoc.Selection.GetElementIds();
+        //List<Element> selectedElements = new List<Element>();
+        //ICollection<ElementId> ids = uidoc.Selection.GetElementIds();
 
-        if (ids != null && ids.Count > 0)
+        //if (ids != null && ids.Count > 0)
+        //{
+        //  foreach (ElementId eid in ids)
+        //  {
+        //    selectedElements.Add(doc.GetElement(eid));
+        //  }
+        //}
+
+        // All elements in model
+
+        List<Element> selectedElements = new List<Element>();
+
+        FilteredElementCollector collector
+          = new FilteredElementCollector(doc)
+            .WhereElementIsNotElementType();
+
+        foreach (Element e in collector)
         {
-          foreach (ElementId eid in ids)
+          if (e.Category != null && e.Category.CategoryType == CategoryType.Model & e.Category.CanAddSubcategory)
           {
-            selectedElements.Add(doc.GetElement(eid));
+            selectedElements.Add(e);
           }
+          
         }
 
         // Create data for TreeView (Category - Family - FamilyType)
@@ -44,6 +61,7 @@ namespace BimTeamTools
         {
           Node categoryNode = new Node();
           categoryNode.Text = category.Key;
+          categoryNode.Cat = category.First().Category;
 
           var elemsByFamilyName = category.
             OrderBy(i => i.get_Parameter(BuiltInParameter.ELEM_FAMILY_PARAM).AsValueString()).
