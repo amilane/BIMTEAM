@@ -7,5 +7,6 @@ namespace BimTeamTools
     public  string name;
     public StorageType storageType;
     public ElementId id;
+    
   }
 }

@@ -14,40 +14,76 @@
   WindowStartupLocation="CenterScreen" 
   ShowActivated="True">
 
-  <Window.Resources>
-    <HierarchicalDataTemplate DataType="{x:Type local:Node}" ItemsSource="{Binding Children}">
-      <StackPanel Orientation="Horizontal">
-        <CheckBox IsChecked="{Binding IsChecked}" Uid="{Binding Id}" PreviewMouseLeftButtonDown="OnMouseLeftButtonDown" />
-        <TextBlock Text="{Binding Text}"/>
-      </StackPanel>
-    </HierarchicalDataTemplate>
-    <Style TargetType="TreeViewItem">
-      <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
-    </Style>
-  </Window.Resources>
-  
-  <Grid>
-    <TreeView
+    <Window.Resources>
+        <HierarchicalDataTemplate DataType="{x:Type local:Node}" ItemsSource="{Binding Children}">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox IsChecked="{Binding IsChecked}" Uid="{Binding Id}" PreviewMouseLeftButtonDown="OnMouseLeftButtonDown" />
+                <TextBlock Text="{Binding Text}"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
+        <Style TargetType="TreeViewItem">
+            <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <TreeView
       Name="treeView"
       HorizontalAlignment="Left"
       Height="455"
       Margin="10,10,0,0"
       VerticalAlignment="Top"
-      Width="215">
-    </TreeView>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="240,336,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-        <TextBox Name ="textBox" HorizontalAlignment="Left" Height="104" Margin="240,361,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" />
+      Width="250">
+        </TreeView>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="265,336,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <TextBox Name ="textBox" HorizontalAlignment="Left" Height="104" Margin="265,361,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" />
         <ComboBox
           Name ="cbParameter1"
           HorizontalAlignment="Left"
-          Margin="240,10,0,0"
+          Margin="414,10,0,0"
           VerticalAlignment="Top"
           Width="120"
           SelectionChanged="cbParameter1_SelectionChanged"
           DropDownOpened="cbParameter1_OnDropDownOpened"
           DisplayMemberPath="Key"
           SelectedValuePath="Value"/>
-        <ComboBox x:Name="cbOperation1" HorizontalAlignment="Left" Margin="365,10,0,0" VerticalAlignment="Top" Width="120"/>
-    <ComboBox x:Name="cbValue1" HorizontalAlignment="Left" Margin="490,10,0,0" VerticalAlignment="Top" Width="120" DropDownOpened="cbValue1_OnDropDownOpened"/>
-    </Grid>
+        <ComboBox
+          Name="cbOperation1"
+          HorizontalAlignment="Left"
+          Margin="539,10,0,0"
+          VerticalAlignment="Top"
+          Width="120"/>
+        <ComboBox
+          Name="cbValue1"
+          HorizontalAlignment="Left"
+          Margin="664,10,0,0"
+          VerticalAlignment="Top"
+          Width="120"
+          DropDownOpened="cbValue1_OnDropDownOpened"
+          SelectionChanged="cbValue1_SelectionChanged"/>
+        <ComboBox
+          x:Name ="cbParameter2"
+          HorizontalAlignment="Left"
+          Margin="414,46,0,0"
+          VerticalAlignment="Top"
+          Width="120"
+          SelectionChanged="cbParameter2_SelectionChanged"
+          DropDownOpened="cbParameter2_OnDropDownOpened"
+          DisplayMemberPath="Key"
+          SelectedValuePath="Value"/>
+        <ComboBox
+          x:Name="cbOperation2"
+          HorizontalAlignment="Left"
+          Margin="539,46,0,0"
+          VerticalAlignment="Top"
+          Width="120"/>
+        <ComboBox
+          x:Name="cbValue2"
+          HorizontalAlignment="Left"
+          Margin="664,46,0,0"
+          VerticalAlignment="Top"
+          Width="120"
+          DropDownOpened="cbValue2_OnDropDownOpened"
+          SelectionChanged="cbValue2_SelectionChanged"/>
+  </Grid>
 </Window>

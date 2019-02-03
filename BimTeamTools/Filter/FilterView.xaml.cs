@@ -44,15 +44,23 @@ namespace BimTeamTools
 
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-      
-      //MessageBox.Show(lol.ToString(), "sdsd");
+      List<List<object>> combos = new List<List<object>>();
+      combos.Add(new List<object>{ (ParameterData)cbParameter1.SelectedValue , cbOperation1.SelectedValue.ToString(), cbValue1.SelectedValue.ToString() });
+
+      ElementParameterFilter filter = CreateParameterFilter.createParameterFilter(DOC,
+        (ParameterData)cbParameter1.SelectedValue, cbOperation1.SelectedValue.ToString(),
+        cbValue1.SelectedValue.ToString());
+      MessageBox.Show(filter.ToString(), "sdsd");
     }
 
     
     private void cbParameter1_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      textBox.Text = ((ParameterData)cbParameter1.SelectedValue).storageType.ToString();
       cbOperation1.ItemsSource = ListOfOperands.listOfOperands(((ParameterData)cbParameter1.SelectedValue).storageType);
+    }
+    private void cbParameter2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      cbOperation2.ItemsSource = ListOfOperands.listOfOperands(((ParameterData)cbParameter2.SelectedValue).storageType);
     }
     private void cbParameter1_OnDropDownOpened(object sender, EventArgs e)
     {
@@ -61,6 +69,13 @@ namespace BimTeamTools
       SortedDictionary<string, ParameterData> parameterDict = GetParamsFromSelectedElements.getParamsFromSelectedElements(collector);
       cbParameter1.ItemsSource = parameterDict;
     }
+    private void cbParameter2_OnDropDownOpened(object sender, EventArgs e)
+    {
+      FilteredElementCollector collector = CollectorFromTreeView.collectorFromTreeView(DOC,
+        (ObservableCollection<Node>)treeView.ItemsSource);
+      SortedDictionary<string, ParameterData> parameterDict = GetParamsFromSelectedElements.getParamsFromSelectedElements(collector);
+      cbParameter2.ItemsSource = parameterDict;
+    }
 
     private void cbValue1_OnDropDownOpened(object sender, EventArgs e)
     {
@@ -68,8 +83,26 @@ namespace BimTeamTools
         (ObservableCollection<Node>)treeView.ItemsSource);
       cbValue1.ItemsSource = ValuesFromParameter.valuesFromParameter(cbParameter1.Text, collector);
     }
-    
+    private void cbValue2_OnDropDownOpened(object sender, EventArgs e)
+    {
+      FilteredElementCollector collector = CollectorFromTreeView.collectorFromTreeView(DOC,
+        (ObservableCollection<Node>)treeView.ItemsSource);
+      cbValue2.ItemsSource = ValuesFromParameter.valuesFromParameter(cbParameter2.Text, collector);
+    }
+    private void cbValue1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      ElementParameterFilter filter = CreateParameterFilter.createParameterFilter(DOC,
+        (ParameterData) cbParameter1.SelectedValue, cbOperation1.SelectedValue.ToString(),
+        cbValue1.SelectedValue.ToString());
+      FilteredElementCollector collector = CollectorFromTreeView.collectorFromTreeView(DOC,
+        (ObservableCollection<Node>)treeView.ItemsSource);
+      FilteredElementCollector filteredCollector = collector.WherePasses(filter);
+      var ids = filteredCollector.ToElementIds();
+    }
+    private void cbValue2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
 
+    }
 
   }
 }

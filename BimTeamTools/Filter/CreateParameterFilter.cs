@@ -1,11 +1,12 @@
 using System;
+using System.Linq;
 using Autodesk.Revit.DB;
 
-namespace BimTeamTools.Filter
+namespace BimTeamTools
 {
   static class CreateParameterFilter
   {
-    public static ElementParameterFilter createParameterFilter(FilteredElementCollector collector, ParameterData parameter, string operation, string ruleString)
+    public static ElementParameterFilter createParameterFilter(Document doc, ParameterData parameter, string operation, string ruleString)
     {
       ElementId parameterId = parameter.id;
       ParameterValueProvider fvp = new ParameterValueProvider(parameterId);
@@ -18,6 +19,7 @@ namespace BimTeamTools.Filter
       switch (storageType)
       {
         case StorageType.String:
+        case StorageType.Integer:
           FilterStringRuleEvaluator fsre = null;
           switch (operation)
           {
@@ -75,6 +77,75 @@ namespace BimTeamTools.Filter
             case "равно":
               fnre = new FilterNumericEquals();
               fRule = new FilterDoubleRule(fvp, fnre, ruleValue, 0.0);
+              filter = new ElementParameterFilter(fRule);
+              break;
+            case "не равно":
+              fnre = new FilterNumericEquals();
+              fRule = new FilterDoubleRule(fvp, fnre, ruleValue, 0.0);
+              fInvRule = new FilterInverseRule(fRule);
+              filter = new ElementParameterFilter(fInvRule);
+              break;
+            case "больше":
+              fnre = new FilterNumericGreater();
+              fRule = new FilterDoubleRule(fvp, fnre, ruleValue, 0.0);
+              filter = new ElementParameterFilter(fRule);
+              break;
+            case "больше или равно":
+              fnre = new FilterNumericGreaterOrEqual();
+              fRule = new FilterDoubleRule(fvp, fnre, ruleValue, 0.0);
+              filter = new ElementParameterFilter(fRule);
+              break;
+            case "меньше":
+              fnre = new FilterNumericLess();
+              fRule = new FilterDoubleRule(fvp, fnre, ruleValue, 0.0);
+              filter = new ElementParameterFilter(fRule);
+              break;
+            case "меньше или равно":
+              fnre = new FilterNumericLessOrEqual();
+              fRule = new FilterDoubleRule(fvp, fnre, ruleValue, 0.0);
+              filter = new ElementParameterFilter(fRule);
+              break;
+          }
+          break;
+        case StorageType.ElementId:
+
+          var levels = new FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Levels).ToElements();
+          var level = levels.Where(i => i.Name == ruleString).FirstOrDefault();
+          ElementId ruleId = level.Id;
+
+          fnre = null;
+          switch (operation)
+          {
+            case "равно":
+              fnre = new FilterNumericEquals();
+              fRule = new FilterElementIdRule(fvp, fnre, ruleId);
+              filter = new ElementParameterFilter(fRule);
+              break;
+            case "не равно":
+              fnre = new FilterNumericEquals();
+              fRule = new FilterElementIdRule(fvp, fnre, ruleId);
+              fInvRule = new FilterInverseRule(fRule);
+              filter = new ElementParameterFilter(fInvRule);
+              break;
+            case "выше":
+              fnre = new FilterNumericGreater();
+              fRule = new FilterElementIdRule(fvp, fnre, ruleId);
+              filter = new ElementParameterFilter(fRule);
+              break;
+            case "ровно или выше":
+              fnre = new FilterNumericGreaterOrEqual();
+              fRule = new FilterElementIdRule(fvp, fnre, ruleId);
+              filter = new ElementParameterFilter(fRule);
+              break;
+            case "ниже":
+              fnre = new FilterNumericLess();
+              fRule = new FilterElementIdRule(fvp, fnre, ruleId);
+              filter = new ElementParameterFilter(fRule);
+              break;
+            case "ровно или ниже":
+              fnre = new FilterNumericLessOrEqual();
+              fRule = new FilterElementIdRule(fvp, fnre, ruleId);
+              filter = new ElementParameterFilter(fRule);
               break;
           }
           break;
@@ -82,24 +153,9 @@ namespace BimTeamTools.Filter
 
 
 
-
-
-
-
       }
+      return filter;
 
-
-
-
-
-
-
-
-
-      
-      
-      
-      
     }
   }
 }
