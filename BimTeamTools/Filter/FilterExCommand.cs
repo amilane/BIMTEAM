@@ -21,21 +21,7 @@ namespace BimTeamTools
         UIDocument uidoc = uiapp.ActiveUIDocument;
         Application app = uiapp.Application;
         Document doc = uidoc.Document;
-
-
-
-        // List of selected elements
-        //List<Element> selectedElements = new List<Element>();
-        //ICollection<ElementId> ids = uidoc.Selection.GetElementIds();
-
-        //if (ids != null && ids.Count > 0)
-        //{
-        //  foreach (ElementId eid in ids)
-        //  {
-        //    selectedElements.Add(doc.GetElement(eid));
-        //  }
-        //}
-
+        
         // All elements in model
 
         List<Element> selectedElements = new List<Element>();
@@ -61,7 +47,6 @@ namespace BimTeamTools
         {
           Node categoryNode = new Node();
           categoryNode.Text = category.Key;
-          categoryNode.Cat = category.First().Category;
 
           var elemsByFamilyName = category.
             OrderBy(i => i.get_Parameter(BuiltInParameter.ELEM_FAMILY_PARAM).AsValueString()).
@@ -100,8 +85,7 @@ namespace BimTeamTools
           window.selectedElements = selectedElements;
           window.treeView.ItemsSource = familyList;
           
-          //window.cbParameter1.ItemsSource = CheckedNodes(window.treeView);
-          
+
           window.ShowDialog();
 
 

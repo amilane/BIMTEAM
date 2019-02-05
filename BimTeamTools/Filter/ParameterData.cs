@@ -4,9 +4,13 @@ namespace BimTeamTools
 {
   class ParameterData
   {
-    public  string name;
-    public StorageType storageType;
-    public ElementId id;
-    
+    public StorageType StorageType;
+    public ElementId Id;
+    public string ParameterName;
+
+    public override string ToString()
+    {
+      return ParameterName;
+    }
   }
 }

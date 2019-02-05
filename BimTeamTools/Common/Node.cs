@@ -17,8 +17,7 @@ namespace BimTeamTools
     private string text;
     private string id;
     private bool? isChecked = false;
-    private bool isExpanded;
-    private Category cat;
+
 
     public ObservableCollection<Node> Children {
       get { return this.children; }
@@ -41,22 +40,6 @@ namespace BimTeamTools
       set {
         this.text = value;
         RaisePropertyChanged("Text");
-      }
-    }
-
-    public Category Cat {
-      get { return this.cat; }
-      set {
-        this.cat = value;
-        RaisePropertyChanged("Category");
-      }
-    }
-
-    public bool IsExpanded {
-      get { return isExpanded; }
-      set {
-        isExpanded = value;
-        RaisePropertyChanged("IsExpanded");
       }
     }
 
@@ -137,9 +120,5 @@ namespace BimTeamTools
   {
     public static string checkBoxId;
   }
-
-
-
-
-
+  
 }

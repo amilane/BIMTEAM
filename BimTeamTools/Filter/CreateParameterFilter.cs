@@ -6,11 +6,11 @@ namespace BimTeamTools
 {
   static class CreateParameterFilter
   {
-    public static ElementParameterFilter createParameterFilter(Document doc, ParameterData parameter, string operation, string ruleString)
+    public static ElementFilter createParameterFilter(Document doc, ParameterData parameter, string operation, string ruleString)
     {
-      ElementId parameterId = parameter.id;
+      ElementId parameterId = parameter.Id;
       ParameterValueProvider fvp = new ParameterValueProvider(parameterId);
-      StorageType storageType = parameter.storageType;
+      StorageType storageType = parameter.StorageType;
       FilterRule fRule = null;
       FilterInverseRule fInvRule = null;
       ElementParameterFilter filter = null;

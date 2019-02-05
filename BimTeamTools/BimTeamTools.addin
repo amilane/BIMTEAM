@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <RevitAddIns>
   <AddIn Type="Application">
-    <Name>SampleApplication</Name>
+    <ParameterName>SampleApplication</ParameterName>
     <Assembly>BimTeamTools.dll</Assembly>
     <AddInId>98d8bd75-ac46-48b8-957c-6941d5e0f159</AddInId>
-    <FullClassName>BimTeamTools.App</FullClassName>
+    <FullClassParameterName>BimTeamTools.App</FullClassParameterName>
     <VendorId>BIMTEAM</VendorId>
     <VendorDescription>http://bimteam.org/</VendorDescription>
   </AddIn>

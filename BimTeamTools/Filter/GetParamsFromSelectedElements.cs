@@ -6,40 +6,56 @@ namespace BimTeamTools
 {
   static class GetParamsFromSelectedElements
   {
-    public static SortedDictionary<string, ParameterData> getParamsFromSelectedElements(FilteredElementCollector collector)
+    class ParameterComparer : IEqualityComparer<Parameter>
     {
-      List<object> listOfParamsDictionaries = new List<object>();
-      var families = collector.GroupBy(e => e.get_Parameter(BuiltInParameter.ELEM_FAMILY_PARAM).AsValueString());
-      foreach (var f in families)
+      public bool Equals(Parameter x, Parameter y)
       {
-        Dictionary<string, ParameterData> tempDict = new Dictionary<string, ParameterData>();
-        var parameters = f.First().Parameters;
-        foreach (Parameter p in parameters)
-        {
-          ParameterData pd = new ParameterData();
-          if (!tempDict.ContainsKey(p.Definition.Name) && p.StorageType != StorageType.ElementId | (p.StorageType == StorageType.ElementId & p.Definition.Name == "Уровень"))
-          {
-            
-            pd.name = p.Definition.Name;
-            pd.storageType = p.StorageType;
-            pd.id = p.Id;
-
-            tempDict.Add(p.Definition.Name, pd);
-          }
-        }
-        listOfParamsDictionaries.Add(tempDict);
+        return x.Id == y.Id;
       }
-
-      var DictMerged = (Dictionary<string, ParameterData>)listOfParamsDictionaries.First();
-      foreach (Dictionary<string, ParameterData> DictA in listOfParamsDictionaries)
+      public int GetHashCode(Parameter parameter)
       {
-        var DictB = DictA.Where(i => DictMerged.Keys.Contains(i.Key)).ToDictionary(o => o.Key, o => o.Value);
-        DictMerged = DictB;
+        return parameter.Id.GetHashCode();
       }
-
-      return new SortedDictionary<string, ParameterData>(DictMerged);
-
 
     }
+
+    public static List<ParameterData> getParamsFromSelectedElements(FilteredElementCollector collector)
+    {
+
+      var families = collector.GroupBy(e => e.get_Parameter(BuiltInParameter.ELEM_FAMILY_PARAM).AsValueString());
+      List<ParameterSet> listOfPsets = new List<ParameterSet>();
+      foreach (var f in families)
+      {
+        var parameters = f.First().Parameters;
+        listOfPsets.Add(parameters);
+      }
+
+      var fset = listOfPsets.First().Cast<Parameter>();
+      foreach (var i in listOfPsets)
+      {
+        var merge = fset.Intersect(i.Cast<Parameter>(), new ParameterComparer());
+        fset = merge;
+      }
+
+      List<ParameterData> outList = new List<ParameterData>();
+
+      foreach (Parameter p in fset)
+      {
+        if (p.StorageType != StorageType.ElementId | (p.StorageType == StorageType.ElementId & p.Definition.Name == "Уровень"))
+        {
+          ParameterData pd = new ParameterData
+          {
+            Id = p.Id,
+            StorageType = p.StorageType,
+            ParameterName = p.Definition.Name
+          };
+
+          outList.Add(pd);
+        }
+      }
+
+      return outList.OrderBy(i => i.ParameterName).ToList();
+    }
+
   }
 }

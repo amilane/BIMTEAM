@@ -14,76 +14,163 @@
   WindowStartupLocation="CenterScreen" 
   ShowActivated="True">
 
-    <Window.Resources>
-        <HierarchicalDataTemplate DataType="{x:Type local:Node}" ItemsSource="{Binding Children}">
-            <StackPanel Orientation="Horizontal">
-                <CheckBox IsChecked="{Binding IsChecked}" Uid="{Binding Id}" PreviewMouseLeftButtonDown="OnMouseLeftButtonDown" />
-                <TextBlock Text="{Binding Text}"/>
-            </StackPanel>
-        </HierarchicalDataTemplate>
-        <Style TargetType="TreeViewItem">
-            <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
-        </Style>
-    </Window.Resources>
+  <Window.Resources>
+    <HierarchicalDataTemplate DataType="{x:Type local:Node}" ItemsSource="{Binding Children}">
+      <StackPanel Orientation="Horizontal">
+        <CheckBox IsChecked="{Binding IsChecked}" Uid="{Binding Id}" PreviewMouseLeftButtonDown="OnMouseLeftButtonDown" />
+        <TextBlock Text="{Binding Text}"/>
+      </StackPanel>
+    </HierarchicalDataTemplate>
+    <Style TargetType="TreeViewItem">
+      <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
+    </Style>
+  </Window.Resources>
 
-    <Grid>
-        <TreeView
-      Name="treeView"
-      HorizontalAlignment="Left"
-      Height="455"
-      Margin="10,10,0,0"
-      VerticalAlignment="Top"
-      Width="250">
-        </TreeView>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="265,336,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-        <TextBox Name ="textBox" HorizontalAlignment="Left" Height="104" Margin="265,361,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" />
-        <ComboBox
-          Name ="cbParameter1"
+  <Grid>
+    <TreeView
+        Name="treeView"
+        HorizontalAlignment="Left"
+        Height="455"
+        Margin="10,10,0,0"
+        VerticalAlignment="Top"
+        Width="250"/>
+    <Button
+        Content="Button"
+        HorizontalAlignment="Left"
+        Margin="265,336,0,0"
+        VerticalAlignment="Top"
+        Width="75"
+        Click="Button_Click"/>
+    <TextBox
+        Name ="textBox"
+        HorizontalAlignment="Left"
+        Height="104"
+        Margin="265,361,0,0"
+        TextWrapping="Wrap"
+        VerticalAlignment="Top"
+        Width="120" />
+    <Grid HorizontalAlignment="Left" Height="120
+              " Margin="317,10,0,0" VerticalAlignment="Top" Width="450">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="30*"/>
+        <RowDefinition Height="30*"/>
+        <RowDefinition Height="30*"/>
+        <RowDefinition Height="30*"/>
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="150*"/>
+        <ColumnDefinition Width="150*"/>
+        <ColumnDefinition Width="150*"/>
+      </Grid.ColumnDefinitions>
+
+      <ComboBox
+        x:Name ="cbParameter1"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        Width="120"
+        Margin="0,0,0,9"
+        SelectionChanged="cbParameter1_SelectionChanged"
+        DropDownOpened="cbParameter1_OnDropDownOpened"
+        Grid.Row="0" Grid.Column="0"/>
+      <ComboBox
+        x:Name="cbOperation1"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        Width="120"
+        Margin="0,0,0,9"
+        Grid.Row="0" Grid.Column="1"/>
+      <ComboBox
+        x:Name="cbValue1"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        Width="120"
+        Margin="0,0,0,9"
+        DropDownOpened="cbValue1_OnDropDownOpened"
+        Grid.Row="0" Grid.Column="2"/>
+      <ComboBox
+        x:Name ="cbParameter2"
+        HorizontalAlignment="Left"
+        Width="120"
+        Margin="0,0,0,9"
+        SelectionChanged="cbParameter2_SelectionChanged"
+        DropDownOpened="cbParameter2_OnDropDownOpened"
+        Grid.Row="1" Grid.Column="0"/>
+      <ComboBox
+        x:Name="cbOperation2"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        Width="120"
+        Margin="0,0,0,9"
+        Grid.Row="1" Grid.Column="1" />
+      <ComboBox
+        x:Name="cbValue2"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        Width="120"
+        Margin="0,0,0,9"
+        DropDownOpened="cbValue2_OnDropDownOpened"
+        Grid.Row="1" Grid.Column="2"/>
+      <ComboBox
+        x:Name ="cbParameter3"
+        HorizontalAlignment="Left"
+        Width="120"
+        Margin="0,0,0,9"
+        SelectionChanged="cbParameter3_SelectionChanged"
+        DropDownOpened="cbParameter3_OnDropDownOpened"
+        Grid.Row="2" Grid.Column="0" />
+      <ComboBox
+        x:Name="cbOperation3"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        Width="120"
+        Margin="0,0,0,9"
+        Grid.Row="2" Grid.Column="1" />
+      <ComboBox
+        x:Name="cbValue3"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        Width="120"
+        Margin="0,0,0,9"
+        DropDownOpened="cbValue3_OnDropDownOpened"
+        Grid.Row="2" Grid.Column="2" />
+      <ComboBox
+        x:Name ="cbParameter4"
+        HorizontalAlignment="Left"
+        Width="120"
+        Margin="0,0,0,9"
+        SelectionChanged="cbParameter4_SelectionChanged"
+        DropDownOpened="cbParameter4_OnDropDownOpened"
+        Grid.Row="3" Grid.Column="0"/>
+      <ComboBox
+        x:Name="cbOperation4"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        Width="120"
+        Margin="0,0,0,9"
+        Grid.Row="3" Grid.Column="1" />
+      <ComboBox
+        x:Name="cbValue4"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        Width="120"
+        Margin="0,0,0,9"
+        DropDownOpened="cbValue4_OnDropDownOpened"
+        Grid.Row="3" Grid.Column="2" />
+    </Grid>
+        <CheckBox
+          x:Name="andCheckBox"
+          Content="И"
           HorizontalAlignment="Left"
-          Margin="414,10,0,0"
+          Margin="317,135,0,0"
           VerticalAlignment="Top"
-          Width="120"
-          SelectionChanged="cbParameter1_SelectionChanged"
-          DropDownOpened="cbParameter1_OnDropDownOpened"
-          DisplayMemberPath="Key"
-          SelectedValuePath="Value"/>
-        <ComboBox
-          Name="cbOperation1"
+          PreviewMouseLeftButtonDown="AndMouseLeftButtonDown"
+          IsChecked="True"/>
+        <CheckBox
+          x:Name="orCheckBox"
+          Content="ИЛИ"
           HorizontalAlignment="Left"
-          Margin="539,10,0,0"
+          Margin="317,153,0,0"
           VerticalAlignment="Top"
-          Width="120"/>
-        <ComboBox
-          Name="cbValue1"
-          HorizontalAlignment="Left"
-          Margin="664,10,0,0"
-          VerticalAlignment="Top"
-          Width="120"
-          DropDownOpened="cbValue1_OnDropDownOpened"
-          SelectionChanged="cbValue1_SelectionChanged"/>
-        <ComboBox
-          x:Name ="cbParameter2"
-          HorizontalAlignment="Left"
-          Margin="414,46,0,0"
-          VerticalAlignment="Top"
-          Width="120"
-          SelectionChanged="cbParameter2_SelectionChanged"
-          DropDownOpened="cbParameter2_OnDropDownOpened"
-          DisplayMemberPath="Key"
-          SelectedValuePath="Value"/>
-        <ComboBox
-          x:Name="cbOperation2"
-          HorizontalAlignment="Left"
-          Margin="539,46,0,0"
-          VerticalAlignment="Top"
-          Width="120"/>
-        <ComboBox
-          x:Name="cbValue2"
-          HorizontalAlignment="Left"
-          Margin="664,46,0,0"
-          VerticalAlignment="Top"
-          Width="120"
-          DropDownOpened="cbValue2_OnDropDownOpened"
-          SelectionChanged="cbValue2_SelectionChanged"/>
-  </Grid>
+          PreviewMouseLeftButtonDown="OrMouseLeftButtonDown"/>
+    </Grid>
 </Window>
