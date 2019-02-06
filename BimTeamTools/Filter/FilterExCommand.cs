@@ -22,8 +22,8 @@ namespace BimTeamTools
         Application app = uiapp.Application;
         Document doc = uidoc.Document;
         
-        // All elements in model
-
+        
+        /*
         List<Element> selectedElements = new List<Element>();
 
         FilteredElementCollector collector
@@ -70,21 +70,20 @@ namespace BimTeamTools
           }
           familyList.Add(categoryNode);
         }
-
+        */
         
 
         System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
 
-        using (FilterView window = new FilterView())
+        using (FilterView window = new FilterView(doc))
         {
           System.Windows.Interop.WindowInteropHelper helper =
             new System.Windows.Interop.WindowInteropHelper(window);
           helper.Owner = proc.MainWindowHandle;
 
           window.DOC = doc;
-          window.selectedElements = selectedElements;
-          window.treeView.ItemsSource = familyList;
-          
+          window.UIDOC = uidoc;
+          //window.treeView.ItemsSource = familyList;
 
           window.ShowDialog();
 
@@ -100,8 +99,6 @@ namespace BimTeamTools
         return Result.Failed;
       }
     }
-
-
 
     private void FindCheckedNodes(
       List<Node> checked_nodes, ObservableCollection<Node> nodes)

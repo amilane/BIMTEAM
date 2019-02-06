@@ -33,22 +33,15 @@
         Height="455"
         Margin="10,10,0,0"
         VerticalAlignment="Top"
-        Width="250"/>
+        Width="250"
+        />
     <Button
-        Content="Button"
+        Content="Выбрать"
         HorizontalAlignment="Left"
-        Margin="265,336,0,0"
+        Margin="317,205,0,0"
         VerticalAlignment="Top"
         Width="75"
         Click="Button_Click"/>
-    <TextBox
-        Name ="textBox"
-        HorizontalAlignment="Left"
-        Height="104"
-        Margin="265,361,0,0"
-        TextWrapping="Wrap"
-        VerticalAlignment="Top"
-        Width="120" />
     <Grid HorizontalAlignment="Left" Height="120
               " Margin="317,10,0,0" VerticalAlignment="Top" Width="450">
       <Grid.RowDefinitions>
@@ -81,12 +74,13 @@
         Grid.Row="0" Grid.Column="1"/>
       <ComboBox
         x:Name="cbValue1"
+        IsEditable="True"
         HorizontalAlignment="Left"
         VerticalAlignment="Top"
         Width="120"
         Margin="0,0,0,9"
         DropDownOpened="cbValue1_OnDropDownOpened"
-        Grid.Row="0" Grid.Column="2"/>
+        Grid.Row="0" Grid.Column="2"   />
       <ComboBox
         x:Name ="cbParameter2"
         HorizontalAlignment="Left"
@@ -104,6 +98,7 @@
         Grid.Row="1" Grid.Column="1" />
       <ComboBox
         x:Name="cbValue2"
+        IsEditable="True"
         HorizontalAlignment="Left"
         VerticalAlignment="Top"
         Width="120"
@@ -127,6 +122,7 @@
         Grid.Row="2" Grid.Column="1" />
       <ComboBox
         x:Name="cbValue3"
+        IsEditable="True"
         HorizontalAlignment="Left"
         VerticalAlignment="Top"
         Width="120"
@@ -150,14 +146,15 @@
         Grid.Row="3" Grid.Column="1" />
       <ComboBox
         x:Name="cbValue4"
+        IsEditable="True"
         HorizontalAlignment="Left"
         VerticalAlignment="Top"
         Width="120"
         Margin="0,0,0,9"
         DropDownOpened="cbValue4_OnDropDownOpened"
-        Grid.Row="3" Grid.Column="2" />
+        Grid.Row="3" Grid.Column="2"/>
     </Grid>
-        <CheckBox
+    <CheckBox
           x:Name="andCheckBox"
           Content="И"
           HorizontalAlignment="Left"
@@ -165,12 +162,14 @@
           VerticalAlignment="Top"
           PreviewMouseLeftButtonDown="AndMouseLeftButtonDown"
           IsChecked="True"/>
-        <CheckBox
+    <CheckBox
           x:Name="orCheckBox"
           Content="ИЛИ"
           HorizontalAlignment="Left"
           Margin="317,153,0,0"
           VerticalAlignment="Top"
           PreviewMouseLeftButtonDown="OrMouseLeftButtonDown"/>
-    </Grid>
+    <TextBlock x:Name="textElementsCount" HorizontalAlignment="Left" Margin="431,237,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
+    <Label Content="Выбрано элементов:" HorizontalAlignment="Left" Margin="312,232,0,0" VerticalAlignment="Top"/>
+  </Grid>
 </Window>

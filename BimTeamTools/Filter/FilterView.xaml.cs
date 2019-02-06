@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
@@ -17,21 +20,34 @@ namespace BimTeamTools
   /// </summary>
   public partial class FilterView : IDisposable
   {
-    public UIApplication UIAPP = null;
-    private Application APP = null;
-    private UIDocument UIDOC = null;
+    public UIDocument UIDOC = null;
     public Document DOC = null;
-    public List<Element> selectedElements;
+    public FilteredElementCollector Collector;
+    
 
-    public FilterView()
+    public FilterView(Document doc)
     {
+      ItemsChangeObservableCollection<Node> items = TreeViewData.treeViewData(doc);
       InitializeComponent();
+      
+      
+      treeView.ItemsSource = items;
+
+      items.CollectionChanged += ItemsOnCollectionChanged;
     }
+
+    private void ItemsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+      FilteredElementCollector collector = CollectorFromTreeView.collectorFromTreeView(DOC, (ObservableCollection<Node>)treeView.ItemsSource);
+      Collector = collector;
+    }
+
 
     public void Dispose()
     {
       this.Close();
     }
+
 
 
     private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -63,7 +79,7 @@ namespace BimTeamTools
             DOC,
             (ParameterData)comboBoxs[i, 0].SelectedValue,
             comboBoxs[i, 1].SelectedValue.ToString(),
-            comboBoxs[i, 2].SelectedValue.ToString());
+            comboBoxs[i, 2].Text);
 
           if (f != null)
           {
@@ -101,8 +117,18 @@ namespace BimTeamTools
           (ObservableCollection<Node>)treeView.ItemsSource).WherePasses(filter).ToElementIds();
       }
 
-      UIDOC.Selection.SetElementIds(ids);
-      UIDOC.ShowElements(ids);
+      if (ids.Count > 0)
+      {
+        textElementsCount.Text = ids.Count.ToString();
+        UIDOC.Selection.SetElementIds(ids);
+        UIDOC.ShowElements(ids);
+      }
+      else
+      {
+        textElementsCount.Text = "0";
+      }
+
+
 
     }
 
@@ -112,9 +138,9 @@ namespace BimTeamTools
     }
     private void cbParameter1_OnDropDownOpened(object sender, EventArgs e)
     {
-      FilteredElementCollector collector = CollectorFromTreeView.collectorFromTreeView(DOC,
-        (ObservableCollection<Node>)treeView.ItemsSource);
-      cbParameter1.ItemsSource = GetParamsFromSelectedElements.getParamsFromSelectedElements(collector);
+      //FilteredElementCollector collector = CollectorFromTreeView.collectorFromTreeView(DOC,
+      //  (ObservableCollection<Node>)treeView.ItemsSource);
+      cbParameter1.ItemsSource = GetParamsFromSelectedElements.getParamsFromSelectedElements(Collector);
     }
     private void cbParameter2_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
@@ -170,6 +196,7 @@ namespace BimTeamTools
         (ObservableCollection<Node>)treeView.ItemsSource);
       cbValue4.ItemsSource = ValuesFromParameter.valuesFromParameter(cbParameter4.Text, collector);
     }
+
   }
 }
 
