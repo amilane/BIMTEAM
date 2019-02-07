@@ -1,15 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using BimTeamTools.Filter;
 using ComboBox = System.Windows.Controls.ComboBox;
 
 
@@ -22,24 +18,14 @@ namespace BimTeamTools
   {
     public UIDocument UIDOC = null;
     public Document DOC = null;
-    public FilteredElementCollector Collector;
-    
+    public FilteredElementCollector Collector;     
 
     public FilterView(Document doc)
     {
-      ItemsChangeObservableCollection<Node> items = TreeViewData.treeViewData(doc);
+      ObservableCollection<Node> items = TreeViewData.treeViewData(doc);
       InitializeComponent();
       
-      
       treeView.ItemsSource = items;
-
-      items.CollectionChanged += ItemsOnCollectionChanged;
-    }
-
-    private void ItemsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-      FilteredElementCollector collector = CollectorFromTreeView.collectorFromTreeView(DOC, (ObservableCollection<Node>)treeView.ItemsSource);
-      Collector = collector;
     }
 
 
@@ -90,6 +76,33 @@ namespace BimTeamTools
       return filters;
     }
 
+
+
+
+    private void CollectParameters_Click(object sender, RoutedEventArgs e)
+    {
+      ObservableCollection<Node> items = (ObservableCollection<Node>)treeView.ItemsSource;
+      FilteredElementCollector collector = CollectorFromTreeView.collectorFromTreeView(DOC, items);
+      List<ParameterData> parameters = GetParamsFromSelectedElements.getParamsFromSelectedElements(collector);
+      
+      cbParameter1.ItemsSource = parameters;
+      cbParameter2.ItemsSource = parameters;
+      cbParameter3.ItemsSource = parameters;
+      cbParameter4.ItemsSource = parameters;
+
+      Collector = collector;
+
+      cbOperation1.Text = "";
+      cbOperation2.Text = "";
+      cbOperation3.Text = "";
+      cbOperation4.Text = "";
+
+      cbValue1.Text = "";
+      cbValue2.Text = "";
+      cbValue3.Text = "";
+      cbValue4.Text = "";
+
+    }
     private void Button_Click(object sender, RoutedEventArgs e)
     {
 
@@ -128,73 +141,59 @@ namespace BimTeamTools
         textElementsCount.Text = "0";
       }
 
-
-
     }
 
     private void cbParameter1_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      cbOperation1.ItemsSource = ListOfOperands.listOfOperands(((ParameterData)cbParameter1.SelectedValue).StorageType);
+      ParameterData pd = (ParameterData) cbParameter1.SelectedValue;
+      if (pd != null)
+      {
+        cbOperation1.ItemsSource = ListOfOperands.listOfOperands(pd.StorageType);
+      }
     }
-    private void cbParameter1_OnDropDownOpened(object sender, EventArgs e)
-    {
-      //FilteredElementCollector collector = CollectorFromTreeView.collectorFromTreeView(DOC,
-      //  (ObservableCollection<Node>)treeView.ItemsSource);
-      cbParameter1.ItemsSource = GetParamsFromSelectedElements.getParamsFromSelectedElements(Collector);
-    }
+
     private void cbParameter2_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      cbOperation2.ItemsSource = ListOfOperands.listOfOperands(((ParameterData)cbParameter2.SelectedValue).StorageType);
+      ParameterData pd = (ParameterData)cbParameter2.SelectedValue;
+      if (pd != null)
+      {
+        cbOperation2.ItemsSource = ListOfOperands.listOfOperands(pd.StorageType);
+      }
     }
-    private void cbParameter2_OnDropDownOpened(object sender, EventArgs e)
-    {
-      FilteredElementCollector collector = CollectorFromTreeView.collectorFromTreeView(DOC,
-        (ObservableCollection<Node>)treeView.ItemsSource);
-      cbParameter2.ItemsSource = GetParamsFromSelectedElements.getParamsFromSelectedElements(collector);
-    }
+
     private void cbParameter3_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      cbOperation3.ItemsSource = ListOfOperands.listOfOperands(((ParameterData)cbParameter3.SelectedValue).StorageType);
+      ParameterData pd = (ParameterData)cbParameter3.SelectedValue;
+      if (pd != null)
+      {
+        cbOperation3.ItemsSource = ListOfOperands.listOfOperands(pd.StorageType);
+      }
     }
-    private void cbParameter3_OnDropDownOpened(object sender, EventArgs e)
-    {
-      FilteredElementCollector collector = CollectorFromTreeView.collectorFromTreeView(DOC,
-        (ObservableCollection<Node>)treeView.ItemsSource);
-      cbParameter3.ItemsSource = GetParamsFromSelectedElements.getParamsFromSelectedElements(collector);
-    }
+
     private void cbParameter4_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      cbOperation4.ItemsSource = ListOfOperands.listOfOperands(((ParameterData)cbParameter4.SelectedValue).StorageType);
+      ParameterData pd = (ParameterData)cbParameter4.SelectedValue;
+      if (pd != null)
+      {
+        cbOperation4.ItemsSource = ListOfOperands.listOfOperands(pd.StorageType);
+      }
     }
-    private void cbParameter4_OnDropDownOpened(object sender, EventArgs e)
-    {
-      FilteredElementCollector collector = CollectorFromTreeView.collectorFromTreeView(DOC,
-        (ObservableCollection<Node>)treeView.ItemsSource);
-      cbParameter4.ItemsSource = GetParamsFromSelectedElements.getParamsFromSelectedElements(collector);
-    }
+
     private void cbValue1_OnDropDownOpened(object sender, EventArgs e)
     {
-      FilteredElementCollector collector = CollectorFromTreeView.collectorFromTreeView(DOC,
-        (ObservableCollection<Node>)treeView.ItemsSource);
-      cbValue1.ItemsSource = ValuesFromParameter.valuesFromParameter(cbParameter1.Text, collector);
+      cbValue1.ItemsSource = ValuesFromParameter.valuesFromParameter(cbParameter1.Text, Collector);
     }
     private void cbValue2_OnDropDownOpened(object sender, EventArgs e)
     {
-      FilteredElementCollector collector = CollectorFromTreeView.collectorFromTreeView(DOC,
-        (ObservableCollection<Node>)treeView.ItemsSource);
-      cbValue2.ItemsSource = ValuesFromParameter.valuesFromParameter(cbParameter2.Text, collector);
+      cbValue2.ItemsSource = ValuesFromParameter.valuesFromParameter(cbParameter2.Text, Collector);
     }
     private void cbValue3_OnDropDownOpened(object sender, EventArgs e)
     {
-      FilteredElementCollector collector = CollectorFromTreeView.collectorFromTreeView(DOC,
-        (ObservableCollection<Node>)treeView.ItemsSource);
-      cbValue3.ItemsSource = ValuesFromParameter.valuesFromParameter(cbParameter3.Text, collector);
+      cbValue3.ItemsSource = ValuesFromParameter.valuesFromParameter(cbParameter3.Text, Collector);
     }
     private void cbValue4_OnDropDownOpened(object sender, EventArgs e)
     {
-      FilteredElementCollector collector = CollectorFromTreeView.collectorFromTreeView(DOC,
-        (ObservableCollection<Node>)treeView.ItemsSource);
-      cbValue4.ItemsSource = ValuesFromParameter.valuesFromParameter(cbParameter4.Text, collector);
+      cbValue4.ItemsSource = ValuesFromParameter.valuesFromParameter(cbParameter4.Text, Collector);
     }
 
   }

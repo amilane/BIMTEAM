@@ -55,7 +55,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="Common\DelegateCommand.cs" />
     <Compile Include="Common\Node.cs" />
     <Compile Include="Filter\CreateParameterFilter.cs" />
     <Compile Include="Filter\FilterView.xaml.cs">
@@ -64,7 +63,6 @@
     <Compile Include="Filter\FilterExCommand.cs" />
     <Compile Include="Filter\CollectorFromTreeView.cs" />
     <Compile Include="Filter\GetParamsFromSelectedElements.cs" />
-    <Compile Include="Filter\ItemsChangeObservableCollection.cs" />
     <Compile Include="Filter\ListOfOperands.cs" />
     <Compile Include="Filter\ParameterData.cs" />
     <Compile Include="Filter\TreeViewData.cs" />

@@ -1,8 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
+
 
 namespace BimTeamTools
 {
@@ -13,18 +12,19 @@ namespace BimTeamTools
       this.id = Guid.NewGuid().ToString();
     }
 
-    private ItemsChangeObservableCollection<Node> children = new ItemsChangeObservableCollection<Node>();
-    private ItemsChangeObservableCollection<Node> parent = new ItemsChangeObservableCollection<Node>();
+    private ObservableCollection<Node> children = new ObservableCollection<Node>();
+    private ObservableCollection<Node> parent = new ObservableCollection<Node>();
     private string text;
     private string id;
     private bool? isChecked = false;
+    
 
 
-    public ItemsChangeObservableCollection<Node> Children {
+    public ObservableCollection<Node> Children {
       get { return this.children; }
     }
 
-    public ItemsChangeObservableCollection<Node> Parent {
+    public ObservableCollection<Node> Parent {
       get { return this.parent; }
     }
 
@@ -77,14 +77,14 @@ namespace BimTeamTools
     
 
     // элемент является вершиной дерева и не имеет родительских элементов
-    private void CheckChildAndParent(ItemsChangeObservableCollection<Node> itemsParent, ItemsChangeObservableCollection<Node> itemsChild, bool? isChecked)
+    private void CheckChildAndParent(ObservableCollection<Node> itemsParent, ObservableCollection<Node> itemsChild, bool? isChecked)
     {
       CheckChildNodes(itemsChild, isChecked);
       CheckParentNodes(itemsParent);
     }
 
     //элемент имеет и родительские элементы и дочерние
-    private void CheckChildNodes(ItemsChangeObservableCollection<Node> itemsChild, bool? isChecked)
+    private void CheckChildNodes(ObservableCollection<Node> itemsChild, bool? isChecked)
     {
       foreach (Node item in itemsChild)
       {
@@ -94,9 +94,8 @@ namespace BimTeamTools
     }
 
     //элемент находится в самом низу дерева и не имеет дочерних элементов
-    private void CheckParentNodes(ItemsChangeObservableCollection<Node> itemsParent)
+    private void CheckParentNodes(ObservableCollection<Node> itemsParent)
     {
-      
       int countCheck = 0;
       bool isNull = false;
       foreach (Node paren in itemsParent)

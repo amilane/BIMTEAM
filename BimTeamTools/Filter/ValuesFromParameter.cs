@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
 
-namespace BimTeamTools.Filter
+namespace BimTeamTools
 {
   static class ValuesFromParameter
   {

@@ -1,14 +1,13 @@
 using Autodesk.Revit.DB;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 
 namespace BimTeamTools
 {
   static class TreeViewData
   {
-    public static ItemsChangeObservableCollection<Node> treeViewData(Document doc)
+    public static ObservableCollection<Node> treeViewData(Document doc)
     {
       List<Element> selectedElements = new List<Element>();
 
@@ -27,7 +26,7 @@ namespace BimTeamTools
 
       // Create data for TreeView (Category - Family - FamilyType)
       var elemsByCategories = selectedElements.OrderBy(i => i.Category.Name).GroupBy(i => i.Category.Name);
-      ItemsChangeObservableCollection<Node> familyList = new ItemsChangeObservableCollection<Node>();
+      ObservableCollection<Node> familyList = new ObservableCollection<Node>();
 
       foreach (var category in elemsByCategories)
       {

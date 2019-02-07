@@ -30,31 +30,39 @@ namespace BimTeamTools
         listOfPsets.Add(parameters);
       }
 
-      var fset = listOfPsets.First().Cast<Parameter>();
-      foreach (var i in listOfPsets)
-      {
-        var merge = fset.Intersect(i.Cast<Parameter>(), new ParameterComparer());
-        fset = merge;
-      }
 
       List<ParameterData> outList = new List<ParameterData>();
-
-      foreach (Parameter p in fset)
+      if (listOfPsets.Count > 0)
       {
-        if (p.StorageType != StorageType.ElementId | (p.StorageType == StorageType.ElementId & p.Definition.Name == "Уровень"))
+        var fset = listOfPsets.First().Cast<Parameter>();
+        foreach (var i in listOfPsets)
         {
-          ParameterData pd = new ParameterData
-          {
-            Id = p.Id,
-            StorageType = p.StorageType,
-            ParameterName = p.Definition.Name
-          };
-
-          outList.Add(pd);
+          var merge = fset.Intersect(i.Cast<Parameter>(), new ParameterComparer());
+          fset = merge;
         }
+
+        foreach (Parameter p in fset)
+        {
+          if (p.StorageType != StorageType.ElementId | (p.StorageType == StorageType.ElementId & p.Definition.Name == "Уровень"))
+          {
+            ParameterData pd = new ParameterData
+            {
+              Id = p.Id,
+              StorageType = p.StorageType,
+              ParameterName = p.Definition.Name
+            };
+
+            outList.Add(pd);
+          }
+        }
+        return outList.OrderBy(i => i.ParameterName).ToList();
+      }
+      else
+      {
+        return outList;
       }
 
-      return outList.OrderBy(i => i.ParameterName).ToList();
+      
     }
 
   }
